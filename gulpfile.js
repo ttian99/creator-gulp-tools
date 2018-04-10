@@ -15,6 +15,7 @@ var TEMP_PATH = '../build-templates/web-mobile'; // 模板文件路径
 var TEMP_150_PATH = '../build-templates/web-mobile-150'; // 模板文件备份路径
 var TEMP_RELEASE_PATH = '../build-templates/web-mobile-release'; // 模板文件备份路径
 var OPEN_PATH = '../build-templates/open'
+var RES_TEMP_PATH = '../build/res-temp/res/raw-assets'; // 压缩后资源缓存路径
 
 var resMin = require('./comm/res-min');
 var creatorCompile = require('./comm/creator-compile.js');
@@ -54,19 +55,19 @@ function stepCompile(isDebug, cb) {
   });
 }
 // 压缩资源
-function stepResMin(cb) {
-  var resPath = path.join(BUILD_PATH, 'res/raw-assets/**/*.{png,jpg}');
-  var tempResPath = path.join(BUILD_PATH, '../temp/res/');
-  if (!fs.existsSync(tempResPath)) {
-    fs.ensureDirSync(tempResPath);
-  } else {
-    fs.emptyDirSync(tempResPath);
+function stepResMin(resPath, cb) {
+  if (resPath instanceof Function) {
+    cb = resPath;
+    resPath = BUILD_PATH;
   }
-  resMin(resPath, tempResPath, function () {
-    fs.copySync(tempResPath, BUILD_PATH + 'res/raw-assets/');
-    if (fs.existsSync(tempResPath)) {
-      fs.emptyDirSync(tempResPath);
-    }
+  if (!fs.existsSync(RES_TEMP_PATH)) {
+    fs.mkdirpSync(RES_TEMP_PATH);
+  } else {
+    fs.emptyDirSync(RES_TEMP_PATH);
+  }
+  var resMinPath = path.join(resPath, 'res/raw-assets/**/*.{png,jpg}'); 
+  resMin(resMinPath, RES_TEMP_PATH, function () {
+    fs.copySync(RES_TEMP_PATH, path.join(resPath + 'res/raw-assets/'));
     cb && cb();
   }, '40-60');
 }
