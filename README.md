@@ -36,5 +36,7 @@ gulp [任务名]
 - "gulp-zip": "^4.1.0",
 - "iconv-lite": "^0.4.19",
 - "moment": "^2.20.0",
-- "mozjpeg": "^5.0.0"
+- "mozjpeg": "^5.0.0",
+- "imagemin-mozjpeg": "^7.0.0",
+- "imagemin-pngquant": "^5.1.0"
 

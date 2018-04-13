@@ -31,4 +31,14 @@ function resMin2(srcPath, destPath, cb, percent) {
     .on('end', cb);
 };
 
-module.exports = resMin2
+var gulpImagemin = require('./gulp-imagemin');
+function resMin3 (srcPath, destPath, cb, percent){
+  var opt = {
+    cache: true,
+    pngQuality: percent || '50',
+    jpgQuality: '70'
+  };
+  gulpImagemin(srcPath, destPath, opt, cb);
+}
+
+module.exports = resMin3
